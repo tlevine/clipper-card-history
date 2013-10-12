@@ -34,10 +34,8 @@ def clean_row(rowlist):
     '''
     columns = ['datetime','transaction.type','location','product','debt.or.credit','balance']
     better_rowlist = rowlist[:4] + ['0'] + rowlist[4:] if len(rowlist) == 5 else rowlist
-    print better_rowlist
 
     rowdict = dict(zip(columns, better_rowlist))
-    print rowdict
     rowdict['datetime'] = datetime.datetime.strptime(rowdict['datetime'], '%m/%d/%Y %I:%M %p')
     rowdict['debt.or.credit'] = float(rowdict['debt.or.credit'])
     rowdict['balance'] = float(rowdict['balance'])
