@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import re
+import datetime
+
 import lxml.etree
 NS = { 'svg': 'http://www.w3.org/2000/svg' }
 
@@ -25,13 +27,18 @@ def add_cell(data, cell):
     else:
         return (completed_rows, partial_row + [cell])
 
-def clean_row(row):
+def clean_row(rowlist):
     '''
     >>> type(clean_row(['08/17/2013 06:14 PM', 'Dual-tag exit transaction, fare payment', 'Civic Center (BART)', 'BART HVD 45/48', '3.55', '11.85']))
     dict
     '''
     columns = ['datetime','transaction.type','location','product','debt.or.credit','balance']
-    return dict(zip(columns, row))
+    rowdict = dict(zip(columns, rowlist))
+    rowdict['datetime'] = datetime.datetime.strptime(rowdict['datetime'], '%m/%d/%Y %I:%M %p')
+    rowdict['debt.or.credit'] = float(rowdict['debt.or.credit'])
+    rowdict['balance'] = float(rowdict['balance'])
+    return rowdict
 
 def go(svg):
-    return map(clean_row, parse_page(svg))
+    rows = filter(lambda row: len(row) == 5, parse_page(svg))
+    return map(clean_row, rows)
