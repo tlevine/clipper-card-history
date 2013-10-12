@@ -6,7 +6,10 @@ NS = { 'svg': 'http://www.w3.org/2000/svg' }
 def parse_page(svg):
     '''
     parse_page(lxml.etree.parse('first page'))[-2]
-    >>> ('08/17/2013 06:14 PM', 'Dual-tag exit transaction, fare payment', 'Civic Center (BART)', 'BART HVD 45/48', 3.55, 11.85)
+    >>> ['08/17/2013 06:14 PM', 'Dual-tag exit transaction, fare payment', 'Civic Center (BART)', 'BART HVD 45/48', '3.55', '11.85']
+
+    >>> set(map(len, parse_page(lxml.etree.parse('first page'))))
+    set([5])
     '''
     g = svg.xpath('//svg:tspan[text()="TRANSACTION TYPE"]/../..', namespaces = NS)[0]
     cells = g.xpath('svg:text', namespaces = NS)
