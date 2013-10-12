@@ -9,4 +9,4 @@ if test -z "$pdf"; then
   exit 1
 fi
 
-pdftotext "$pdf"
+pdf2svg bart-2013-10-11.pdf
