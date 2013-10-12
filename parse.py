@@ -33,12 +33,16 @@ def clean_row(rowlist):
     dict
     '''
     columns = ['datetime','transaction.type','location','product','debt.or.credit','balance']
-    rowdict = dict(zip(columns, rowlist))
+    better_rowlist = rowlist[:4] + ['0'] + rowlist[4:] if len(rowlist) == 5 else rowlist
+    print better_rowlist
+
+    rowdict = dict(zip(columns, better_rowlist))
+    print rowdict
     rowdict['datetime'] = datetime.datetime.strptime(rowdict['datetime'], '%m/%d/%Y %I:%M %p')
     rowdict['debt.or.credit'] = float(rowdict['debt.or.credit'])
     rowdict['balance'] = float(rowdict['balance'])
     return rowdict
 
 def go(svg):
-    rows = filter(lambda row: len(row) == 5, parse_page(svg))
+    rows = filter(lambda row: len(row) > 0, parse_page(svg))
     return map(clean_row, rows)
