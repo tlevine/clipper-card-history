@@ -24,3 +24,14 @@ def add_cell(data, cell):
         return (completed_rows + [partial_row], [cell])
     else:
         return (completed_rows, partial_row + [cell])
+
+def clean_row(row):
+    '''
+    >>> type(clean_row(['08/17/2013 06:14 PM', 'Dual-tag exit transaction, fare payment', 'Civic Center (BART)', 'BART HVD 45/48', '3.55', '11.85']))
+    dict
+    '''
+    columns = ['datetime','transaction.type','location','product','debt.or.credit','balance']
+    return dict(zip(columns, row))
+
+def go(svg):
+    return map(clean_row, parse_page(svg))
